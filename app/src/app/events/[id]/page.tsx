@@ -7,6 +7,7 @@ import { CalendarIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline
 import { useWallet } from '@solana/wallet-adapter-react';
 import toast from 'react-hot-toast';
 import { getEventById } from '@/services/eventService';
+import { buyTicket } from '@/services/ticketService';
 import { EventData } from '@/components/events/EventCarousel';
 
 export default function EventDetailsPage() {
@@ -15,7 +16,7 @@ export default function EventDetailsPage() {
   const [event, setEvent] = useState<EventData | null>(null);
   const [loading, setLoading] = useState(true);
   const [buyingTicket, setBuyingTicket] = useState(false);
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
 
   useEffect(() => {
     async function fetchEvent() {
@@ -45,19 +46,27 @@ export default function EventDetailsPage() {
   };
 
   const handleBuyTicket = async () => {
-    if (!connected) {
+    if (!connected || !publicKey) {
       toast.error('Please connect your wallet to purchase a ticket');
       return;
     }
 
     try {
       setBuyingTicket(true);
-      // Here you would call your Solana program to purchase a ticket
       
-      // Simulate a delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call the buyTicket service
+      const result = await buyTicket(id as string, publicKey.toString());
       
-      toast.success('Ticket purchased successfully!');
+      if (result.success) {
+        toast.success('Ticket purchased successfully!');
+        
+        // Optionally redirect to tickets page
+        setTimeout(() => {
+          router.push('/tickets');
+        }, 2000);
+      } else {
+        toast.error(result.error || 'Failed to purchase ticket');
+      }
     } catch (error) {
       console.error('Error purchasing ticket:', error);
       toast.error('Failed to purchase ticket');
