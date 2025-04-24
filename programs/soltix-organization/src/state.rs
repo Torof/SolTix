@@ -1,27 +1,26 @@
 use anchor_lang::prelude::*;
 
 #[account]
-pub struct OrganizationData {
-    pub name: String,                 // Short organization name
-    pub owner: Pubkey,                // Organization owner/admin
-    pub metadata_uri: String,         // URI pointing to off-chain metadata (IPFS/Arweave)
-    pub event_count: u64,             // Total events created
-    pub events: Vec<Pubkey>,          // List of all events created
-    pub registry: Pubkey,             // Registry program that created this organization
-    pub bump: u8,                     // PDA bump
+pub struct Organization {
+    pub owner: Pubkey,           // Owner's wallet
+    pub name: String,            // Organization name
+    pub metadata_uri: String,    // URI to metadata (IPFS, Arweave, etc.)
+    pub event_count: u64,        // Count of events created
+    pub bump: u8,                // PDA bump
 }
 
 #[account]
-pub struct EventInfo {
-    pub id: u64,                      // Unique identifier
-    pub name: String,                 // Event name
-    pub organization: Pubkey,         // Organization that created this event
-    pub metadata_uri: String,         // URI pointing to off-chain metadata
-    pub start_time: i64,              // Event start timestamp
-    pub end_time: i64,                // Event end timestamp
-    pub total_tickets: u64,           // Total number of tickets available
-    pub remaining_tickets: u64,       // Number of tickets still available
-    pub ticket_price: u64,            // Price in lamports
-    pub event_program_id: Pubkey,     // Address of event's program
-    pub bump: u8,                     // PDA bump
+pub struct Event {
+    pub owner: Pubkey,             // Event creator (should match organization owner)
+    pub organization: Pubkey,      // Organization account address
+    pub name: String,              // Event name
+    pub description: String,       // Event description
+    pub location: String,          // Physical or virtual location
+    pub date: i64,                 // Unix timestamp
+    pub price: u64,                // Price in lamports
+    pub max_capacity: u32,         // Maximum attendees
+    pub current_capacity: u32,     // Current attendees
+    pub ticket_metadata_uri: String, // URI to ticket metadata
+    pub sold_out: bool,            // Whether the event is sold out
+    pub bump: u8,                  // PDA bump
 }

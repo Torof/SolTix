@@ -2,7 +2,7 @@
 name = "soltix-event"
 version = "0.1.0"
 description = "Event program for SolTix"
-edition = "2025"
+edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
@@ -14,10 +14,8 @@ no-idl = []
 no-log-ix-name = []
 cpi = ["no-entrypoint"]
 default = []
+idl-build = ["anchor-lang/idl-build"]
 
 [dependencies]
-anchor-lang = "0.31.1"
-solana-program = "2.1.21"
-anchor-spl = "0.31.1"
-mpl-token-metadata = { version = "4.0.0", features = ["no-entrypoint"] }
-soltix-organization = { path = "../soltix-organization", features = ["cpi"] }
+anchor-lang = "=0.29.0"
+solana-program = "=1.16.15"

@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use crate::{state::*, errors::*};
+use crate::state::{Registry, OrganizationInfo, MAX_ORGANIZATIONS};
+use crate::errors::RegistryError;
 
 #[derive(Accounts)]
 #[instruction(name: String, description: String)]
@@ -50,11 +51,17 @@ pub fn handler(
     org_info.description = description;
     org_info.kyc_verified = true; // For demo purposes, auto-verify
     org_info.org_program_id = Pubkey::default(); // Will be updated when org program is deployed
-    org_info.bump = *ctx.bumps.get("organization_info").unwrap();
+    org_info.bump = ctx.bumps.organization_info;
     
-    // Update registry
-    registry.organizations.push(org_info.key());
-    registry.organization_count += 1;
+    // Add organization to registry - fix borrow checker issues by storing the index first
+    if registry.organization_count_added < MAX_ORGANIZATIONS as u64 {
+        let index = registry.organization_count_added as usize;
+        registry.organizations[index] = org_info.key();
+        registry.organization_count_added += 1;
+        registry.organization_count += 1;
+    } else {
+        return err!(RegistryError::RegistryFull);
+    }
     
     msg!("Organization registered: {}", org_info.name);
     Ok(())

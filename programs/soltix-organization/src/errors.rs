@@ -2,15 +2,18 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum OrganizationError {
-    #[msg("You are not authorized to perform this action")]
+    #[msg("Only the organization owner can perform this action")]
     Unauthorized,
     
-    #[msg("Name is too long (max 50 characters)")]
-    NameTooLong,
+    #[msg("Event is already sold out")]
+    EventSoldOut,
     
-    #[msg("URI is too long (max 200 characters)")]
-    UriTooLong,
+    #[msg("Invalid event date")]
+    InvalidEventDate,
     
-    #[msg("End time must be after start time")]
-    InvalidTimeRange,
+    #[msg("Invalid price")]
+    InvalidPrice,
+    
+    #[msg("Invalid capacity")]
+    InvalidCapacity,
 }

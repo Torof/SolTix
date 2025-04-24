@@ -2,15 +2,27 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum RegistryError {
-    #[msg("You are not authorized to perform this action")]
-    Unauthorized,
-    
-    #[msg("Organization name is too long (max 50 characters)")]
+    #[msg("Organization name too long, maximum 50 characters")]
     NameTooLong,
     
-    #[msg("Organization description is too long (max 200 characters)")]
+    #[msg("Organization description too long, maximum 200 characters")]
     DescriptionTooLong,
     
-    #[msg("Event not found in any status list")]
+    #[msg("Event not found")]
     EventNotFound,
+    
+    #[msg("Organization not found")]
+    OrganizationNotFound,
+    
+    #[msg("Only the registry authority can perform this action")]
+    Unauthorized,
+    
+    #[msg("Invalid event status transition")]
+    InvalidStatusTransition,
+    
+    #[msg("Category has reached maximum capacity")]
+    CategoryFull,
+    
+    #[msg("Registry has reached maximum capacity for organizations")]
+    RegistryFull,
 }

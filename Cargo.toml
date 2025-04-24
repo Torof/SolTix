@@ -1,8 +1,17 @@
 [workspace]
 members = [
-    "programs/*"
+  "programs/soltix-event",
+  "programs/soltix-organization",
+  "programs/soltix-registry"
 ]
 resolver = "2"
+
+# Instead of patching, we'll use a workspace-level dependency
+[workspace.dependencies]
+solana-program = "=1.16.15"
+anchor-lang = "=0.29.0"
+anchor-spl = "=0.29.0"
+spl-token = "=3.5.0"
 
 [profile.release]
 overflow-checks = true

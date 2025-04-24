@@ -2,18 +2,18 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum EventError {
-    #[msg("You are not authorized to perform this action")]
+    #[msg("Only the authority can perform this action")]
     Unauthorized,
     
-    #[msg("Event has not started yet")]
-    EventNotStarted,
+    #[msg("Ticket is already used")]
+    TicketAlreadyUsed,
     
-    #[msg("Event has already ended")]
-    EventEnded,
+    #[msg("Event not found")]
+    EventNotFound,
     
-    #[msg("No tickets remaining")]
-    SoldOut,
+    #[msg("Event is sold out")]
+    EventSoldOut,
     
-    #[msg("Payment amount is incorrect")]
-    IncorrectPaymentAmount,
+    #[msg("Invalid ticket")]
+    InvalidTicket,
 }
